@@ -1,5 +1,5 @@
 #![deny(missing_docs)]
-#![cfg_attr(not(feature = "use_std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std)]
 
 //! A `no_std` crate implementing the [ZyAura ZG][ZG] CO₂ sensor protocol.
 //!

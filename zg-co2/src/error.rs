@@ -18,5 +18,5 @@ impl Display for Error {
     }
 }
 
-#[cfg(feature = "use_std")]
+#[cfg(feature = "std")]
 impl std::error::Error for Error {}
