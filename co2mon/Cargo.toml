@@ -12,4 +12,4 @@ exclude = ["udev/*"]
 
 [dependencies]
 hidapi = "0.5"
-zg-co2 = { version = "0.1.0-alpha.0", path = "../zg-co2" }
+zg-co2 = { version = "0.1.0-alpha.2", path = "../zg-co2" }
