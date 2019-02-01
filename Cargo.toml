@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "co2mon",
+    "zg-co2",
+]

@@ -1,0 +1,15 @@
+[package]
+name = "co2mon"
+version = "0.1.0-alpha.0"
+authors = ["Laurențiu Nicola <lnicola@dend.ro>"]
+edition = "2018"
+description = "Driver for the Holtek ZyTemp CO₂ USB HID sensors"
+keywords = ["airco2ntrol", "co2", "holtek", "zytemp"]
+categories = ["hardware-support", "no-std"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/lnicola/co2mon"
+exclude = ["udev/*"]
+
+[dependencies]
+hidapi = "0.5"
+zg-co2 = { version = "0.1.0-alpha.0", path = "../zg-co2" }

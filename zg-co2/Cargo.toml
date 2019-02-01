@@ -1,0 +1,19 @@
+[package]
+name = "zg-co2"
+version = "0.1.0-alpha.0"
+authors = ["Laurențiu Nicola <lnicola@dend.ro>"]
+edition = "2018"
+description = "ZyAura CO₂ sensor protocol implementation"
+keywords = ["co2", "zyaura", "zg"]
+categories = ["embedded", "no-std"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/lnicola/co2mon"
+
+[features]
+# The use_std feature enables std support. Currently it's used only to
+# implement std::error::Error on zg_co2::Error.
+use_std = []
+default = ["use_std"]
+
+[dev-dependencies]
+assert_float_eq = { version = "1.1", default-features = false }

@@ -1,0 +1,10 @@
+dist: xenial
+language: rust
+addons:
+  apt:
+    packages:
+      - libusb-1.0-0-dev
+script:
+    - cargo build
+    - cargo test
+    - cargo test --no-default-features
