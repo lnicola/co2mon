@@ -1,3 +1,7 @@
+os:
+    - windows
+    - linux
+    - osx
 dist: xenial
 language: rust
 addons:
