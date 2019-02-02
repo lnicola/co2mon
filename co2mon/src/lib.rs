@@ -49,6 +49,7 @@
 use hidapi::{HidApi, HidDevice};
 use std::ffi::CString;
 use std::result;
+use std::time::Duration;
 use zg_co2;
 
 pub use error::Error;
@@ -77,6 +78,7 @@ pub type Result<T> = result::Result<T, Error>;
 pub struct Sensor {
     device: HidDevice,
     key: [u8; 8],
+    timeout: Option<Duration>,
 }
 
 impl Sensor {
@@ -102,14 +104,25 @@ impl Sensor {
         let key = options.key;
         device.send_feature_report(&key)?;
 
-        let air_control = Self { device, key };
+        let air_control = Self {
+            device,
+            key,
+            timeout: options.timeout,
+        };
         Ok(air_control)
     }
 
     /// Takes a measurement from the sensor.
     pub fn read(&self) -> Result<Measurement> {
         let mut data = [0; 8];
-        let _len = self.device.read(&mut data)?;
+
+        // FIXME: might overflow
+        let timeout = self
+            .timeout
+            .map(|timeout| timeout.as_secs() as i32 * 1_000 + timeout.subsec_millis() as i32)
+            .unwrap_or(-1);
+
+        let _len = self.device.read_timeout(&mut data, timeout)?;
 
         let data = decrypt(data, self.key);
         let measurement = zg_co2::decode([data[0], data[1], data[2], data[3], data[4]])?;
@@ -152,12 +165,13 @@ enum DevicePathType {
 /// Sensor open options.
 ///
 /// Opens the first available device with the USB Vendor ID `0x04d9`
-/// and Product ID `0xa052` and with a `0` encryption key.
+/// and Product ID `0xa052`, a `0` encryption key and a 5 seconds timeout.
 ///
 /// Normally there's no need to change the encryption key.
 pub struct OpenOptions {
     path_type: DevicePathType,
     key: [u8; 8],
+    timeout: Option<Duration>,
 }
 
 impl Default for OpenOptions {
@@ -171,6 +185,7 @@ impl OpenOptions {
         Self {
             path_type: DevicePathType::Id,
             key: [0; 8],
+            timeout: Some(Duration::from_secs(5)),
         }
     }
 
@@ -189,6 +204,12 @@ impl OpenOptions {
     /// Sets the encryption key.
     pub fn with_key(&mut self, key: [u8; 8]) -> &mut Self {
         self.key = key;
+        self
+    }
+
+    /// Sets the read timeout.
+    pub fn timeout(&mut self, timeout: Option<Duration>) -> &mut Self {
+        self.timeout = timeout;
         self
     }
 
