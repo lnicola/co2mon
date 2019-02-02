@@ -10,6 +10,12 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/lnicola/co2mon"
 exclude = ["udev/*"]
 
+[features]
+linux-static-libusb = ["hidapi/linux-static-libusb"]
+linux-static-hidraw = ["hidapi/linux-static-hidraw"]
+linux-shared-libusb = ["hidapi/linux-shared-libusb"]
+linux-shared-hidraw = ["hidapi/linux-shared-hidraw"]
+
 [dependencies]
 hidapi = "0.5"
 zg-co2 = { version = "0.1.0-alpha.2", path = "../zg-co2" }
