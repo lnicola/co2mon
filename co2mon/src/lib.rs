@@ -122,7 +122,9 @@ impl Sensor {
             .map(|timeout| timeout.as_secs() as i32 * 1_000 + timeout.subsec_millis() as i32)
             .unwrap_or(-1);
 
-        let _len = self.device.read_timeout(&mut data, timeout)?;
+        if self.device.read_timeout(&mut data, timeout)? != 8 {
+            return Err(Error::InvalidMessage);
+        }
 
         let data = decrypt(data, self.key);
         let measurement = zg_co2::decode([data[0], data[1], data[2], data[3], data[4]])?;
