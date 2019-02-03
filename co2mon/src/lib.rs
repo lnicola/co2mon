@@ -102,7 +102,14 @@ impl Sensor {
         }?;
 
         let key = options.key;
-        device.send_feature_report(&key)?;
+
+        // fill in the Report Id
+        let frame = {
+            let mut frame = [0; 9];
+            frame[1..9].copy_from_slice(&key);
+            frame
+        };
+        device.send_feature_report(&frame)?;
 
         let air_control = Self {
             device,
