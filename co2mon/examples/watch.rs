@@ -1,4 +1,6 @@
 use co2mon::{Measurement, Result, Sensor};
+use std::thread;
+use std::time::Duration;
 
 fn read_both(sensor: &Sensor) -> Result<(f32, u16)> {
     let mut temperature = None;
@@ -22,6 +24,6 @@ fn main() -> Result<()> {
             Ok((temperature, co2)) => println!("{:.4} °C, {} ppm CO₂", temperature, co2),
             Err(e) => eprintln!("{}", e),
         }
-        std::thread::sleep(std::time::Duration::from_secs(5));
+        thread::sleep(Duration::from_secs(5));
     }
 }
