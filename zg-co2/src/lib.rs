@@ -56,6 +56,10 @@ pub enum Measurement {
 /// ```
 /// let decoded = zg_co2::decode([0x50, 0x04, 0x57, 0xab, 0x0d]);
 /// ```
+///
+/// # Errors
+///
+/// An error will be returned if the message could not be decoded.
 pub fn decode(data: [u8; 5]) -> Result<Measurement> {
     if data[4] != 0x0d {
         return Err(Error::InvalidMessage);

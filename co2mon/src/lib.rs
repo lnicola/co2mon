@@ -128,6 +128,10 @@ impl Sensor {
     }
 
     /// Takes a single measurement from the sensor.
+    ///
+    /// # Errors
+    ///
+    /// An error will be returned if a message could not be read or decoded.
     pub fn read_one(&self) -> Result<Measurement> {
         let mut data = [0; 8];
         if self.device.read_timeout(&mut data, self.timeout)? != 8 {
