@@ -242,4 +242,16 @@ mod tests {
         let data = super::decrypt(data, key);
         assert_eq!(data, [0x50, 0x04, 0x57, 0xab, 0x0d, 0x00, 0x00, 0x00]);
     }
+
+    #[test]
+    fn test_open_options_send() {
+        fn assert_send<T: Send>() {}
+        assert_send::<super::OpenOptions>();
+    }
+
+    #[test]
+    fn test_open_options_sync() {
+        fn assert_sync<T: Sync>() {}
+        assert_sync::<super::OpenOptions>();
+    }
 }
