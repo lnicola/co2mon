@@ -11,6 +11,9 @@ addons:
 script:
     - cargo build
     - cargo test --manifest-path co2mon/Cargo.toml
+    - cargo test --manifest-path co2mon/Cargo.toml --features serde
+    - cargo test --manifest-path co2mon/Cargo.toml --no-default-features
+    - cargo test --manifest-path co2mon/Cargo.toml --no-default-features --features serde
     - cargo test --manifest-path zg-co2/Cargo.toml
     - cargo test --manifest-path zg-co2/Cargo.toml --features serde
     - cargo test --manifest-path zg-co2/Cargo.toml --no-default-features

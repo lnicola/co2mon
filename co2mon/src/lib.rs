@@ -41,13 +41,21 @@
 //!
 //! Note that the `udev` rule above makes the device accessible to every local user.
 //!
+//! # Features
+//!
+//! The `serde` feature enables serialization and deserialization support for
+//! the [`Reading`][Reading] and [`SingleReading`][SingleReading] structs.
+//!
 //! # References
+//!
 //! The USB HID protocol is not documented, but was [reverse-engineered][had] [before][revspace].
 //!
 //! [had]: https://hackaday.io/project/5301/
 //! [revspace]: https://revspace.nl/CO2MeterHacking
 
 use hidapi::{HidApi, HidDevice};
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
 use std::ffi::CString;
 use std::result;
@@ -61,6 +69,26 @@ mod error;
 
 /// A specialized [`Result`][std::result::Result] type for the fallible functions.
 pub type Result<T> = result::Result<T, Error>;
+
+/// A reading consisting of temperature (in °C) and CO₂ concentration (in ppm) values.
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+pub struct Reading {
+    temperature: f32,
+    co2: u16,
+}
+
+impl Reading {
+    /// Returns the measured temperature in °C.
+    pub fn temperature(&self) -> f32 {
+        self.temperature
+    }
+
+    /// Returns the CO₂ concentration in ppm (parts per million).
+    pub fn co2(&self) -> u16 {
+        self.co2
+    }
+}
 
 /// Sensor driver struct.
 ///
@@ -144,7 +172,8 @@ impl Sensor {
     ///
     /// # Errors
     ///
-    /// An error will be returned if a message could not be read or decoded.
+    /// An error will be returned on an I/O error or if a message could not be
+    /// read or decoded.
     ///
     /// # Example
     ///
@@ -167,6 +196,42 @@ impl Sensor {
         let data = decrypt(data, self.key);
         let reading = zg_co2::decode([data[0], data[1], data[2], data[3], data[4]])?;
         Ok(reading)
+    }
+
+    /// Takes a multiple readings from the sensor until the temperature and
+    /// CO₂ concentration are available, and returns both.
+    ///
+    /// # Errors
+    ///
+    /// An error will be returned on an I/O error or if a message could not be
+    /// read or decoded.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::{Result, Sensor};
+    /// # fn main() -> Result<()> {
+    /// #
+    /// let sensor = Sensor::open_default()?;
+    /// let reading = sensor.read()?;
+    /// println!("{} °C, {} ppm CO₂", reading.temperature(), reading.co2());
+    /// #
+    /// # Ok(())
+    /// # }
+    pub fn read(&self) -> Result<Reading> {
+        let mut temperature = None;
+        let mut co2 = None;
+        loop {
+            match self.read_one()? {
+                SingleReading::Temperature(val) => temperature = Some(val),
+                SingleReading::CO2(val) => co2 = Some(val),
+                _ => {}
+            }
+            if let (Some(temperature), Some(co2)) = (temperature, co2) {
+                let reading = Reading { temperature, co2 };
+                return Ok(reading);
+            }
+        }
     }
 }
 
