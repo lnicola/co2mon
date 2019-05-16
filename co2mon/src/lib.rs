@@ -16,7 +16,7 @@
 //! # fn main() -> Result<()> {
 //! #
 //! let sensor = Sensor::open_default()?;
-//! let reading = sensor.read()?;
+//! let reading = sensor.read_one()?;
 //! println!("{:?}", reading);
 //! #
 //! # Ok(())
@@ -71,7 +71,7 @@ pub type Result<T> = result::Result<T, Error>;
 /// # fn main() -> Result<()> {
 /// #
 /// let sensor = Sensor::open_default()?;
-/// let reading = sensor.read()?;
+/// let reading = sensor.read_one()?;
 /// println!("{:?}", reading);
 /// #
 /// # Ok(())
@@ -127,8 +127,8 @@ impl Sensor {
         Ok(air_control)
     }
 
-    /// Takes a measurement from the sensor.
-    pub fn read(&self) -> Result<Measurement> {
+    /// Takes a single measurement from the sensor.
+    pub fn read_one(&self) -> Result<Measurement> {
         let mut data = [0; 8];
         if self.device.read_timeout(&mut data, self.timeout)? != 8 {
             return Err(Error::InvalidMessage);

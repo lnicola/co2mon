@@ -6,7 +6,7 @@ fn read_both(sensor: &Sensor) -> Result<(f32, u16)> {
     let mut temperature = None;
     let mut co2 = None;
     loop {
-        match sensor.read()? {
+        match sensor.read_one()? {
             Measurement::Temperature(val) => temperature = Some(val),
             Measurement::CO2(val) => co2 = Some(val),
             _ => {}
