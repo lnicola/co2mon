@@ -90,7 +90,7 @@ impl Sensor {
         OpenOptions::new().open()
     }
 
-    fn open(options: OpenOptions) -> Result<Self> {
+    fn open(options: &OpenOptions) -> Result<Self> {
         let hidapi = HidApi::new()?;
 
         const VID: u16 = 0x04d9;
@@ -98,8 +98,8 @@ impl Sensor {
 
         let device = match options.path_type {
             DevicePathType::Id => hidapi.open(VID, PID),
-            DevicePathType::Serial(sn) => hidapi.open_serial(VID, PID, &sn),
-            DevicePathType::Path(path) => hidapi.open_path(&path),
+            DevicePathType::Serial(ref sn) => hidapi.open_serial(VID, PID, &sn),
+            DevicePathType::Path(ref path) => hidapi.open_path(&path),
         }?;
 
         let key = options.key;
@@ -227,7 +227,7 @@ impl OpenOptions {
     }
 
     /// Opens the sensor.
-    fn open(self) -> Result<Sensor> {
+    fn open(&self) -> Result<Sensor> {
         Sensor::open(self)
     }
 }
