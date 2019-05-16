@@ -16,5 +16,8 @@ repository = "https://github.com/lnicola/co2mon"
 std = []
 default = ["std"]
 
+[dependencies]
+serde = { version = "1.0", optional = true, default-features = false, features = ["derive"] }
+
 [dev-dependencies]
 assert_float_eq = { version = "1.1", default-features = false }
