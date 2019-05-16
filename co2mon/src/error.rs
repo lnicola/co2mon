@@ -7,11 +7,19 @@ use std::fmt::{self, Display, Formatter};
 pub enum Error {
     /// A hardware access error.
     Hid(HidError),
-    /// The sensor returned an invalid message.
+    /// The sensor returned an invalid message or a single read timeout
+    /// expired.
     InvalidMessage,
     /// A checksum error.
     Checksum,
-    /// The timeout was too large.
+    /// The sensor did not report all values before the timeout expired.
+    ///
+    /// Note that this can only occur when calling
+    /// [`Sensor::read`][crate::Sensor::read].
+    /// [`Sensor::read_one`][crate::Sensor::read_one] returns
+    /// [`Error::InvalidMessage`] on timeout.
+    Timeout,
+    /// The configured timeout was too large.
     InvalidTimeout,
     /// Hint against exhaustive matching.
     ///

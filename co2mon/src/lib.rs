@@ -3,8 +3,8 @@
 
 //! A driver for the Holtek ([ZyAura ZG][ZG]) CO₂ USB monitors.
 //!
-//! The implementation was tested using a [TFA-Dostmann AIRCO2TROL MINI]
-//! [AIRCO2TROL MINI] sensor.
+//! The implementation was tested using a
+//! [TFA-Dostmann AIRCO2TROL MINI][AIRCO2TROL MINI] sensor.
 //!
 //! [AIRCO2TROL MINI]: https://www.tfa-dostmann.de/en/produkt/co2-monitor-airco2ntrol-mini/
 //! [ZG]: http://www.zyaura.com/products/ZG_module.asp
@@ -59,7 +59,7 @@ use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
 use std::ffi::CString;
 use std::result;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 use zg_co2;
 
 pub use error::Error;
@@ -221,8 +221,18 @@ impl Sensor {
     pub fn read(&self) -> Result<Reading> {
         let mut temperature = None;
         let mut co2 = None;
+        let mut duration = Duration::default();
         loop {
-            match self.read_one()? {
+            let reading = if self.timeout != -1 {
+                let start = Instant::now();
+                let reading = self.read_one()?;
+                duration += Instant::now() - start;
+                reading
+            } else {
+                self.read_one()?
+            };
+
+            match reading {
                 SingleReading::Temperature(val) => temperature = Some(val),
                 SingleReading::CO2(val) => co2 = Some(val),
                 _ => {}
@@ -230,6 +240,10 @@ impl Sensor {
             if let (Some(temperature), Some(co2)) = (temperature, co2) {
                 let reading = Reading { temperature, co2 };
                 return Ok(reading);
+            }
+
+            if self.timeout != -1 && duration.as_millis() > self.timeout as u128 {
+                return Err(Error::Timeout);
             }
         }
     }
