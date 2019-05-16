@@ -276,7 +276,7 @@ fn decrypt(mut data: [u8; 8], key: [u8; 8]) -> [u8; 8] {
     data
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum DevicePathType {
     Id,
     SerialNumber(String),
@@ -303,7 +303,7 @@ enum DevicePathType {
 /// #
 /// # Ok(())
 /// # }
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OpenOptions {
     path_type: DevicePathType,
     key: [u8; 8],
