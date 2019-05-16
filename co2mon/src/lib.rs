@@ -48,6 +48,7 @@
 //! [revspace]: https://revspace.nl/CO2MeterHacking
 
 use hidapi::{HidApi, HidDevice};
+use std::convert::TryFrom;
 use std::ffi::CString;
 use std::result;
 use std::time::Duration;
@@ -124,10 +125,10 @@ impl Sensor {
     pub fn read(&self) -> Result<Measurement> {
         let mut data = [0; 8];
 
-        // FIXME: might overflow
         let timeout = self
             .timeout
-            .map(|timeout| timeout.as_secs() as i32 * 1_000 + timeout.subsec_millis() as i32)
+            .map(|timeout| timeout.as_millis())
+            .and_then(|ms| i32::try_from(ms).ok())
             .unwrap_or(-1);
 
         if self.device.read_timeout(&mut data, timeout)? != 8 {
