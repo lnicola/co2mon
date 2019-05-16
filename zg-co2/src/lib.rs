@@ -4,14 +4,38 @@
 
 //! A `no_std` crate implementing the [ZyAura ZG][ZG] CO₂ sensor protocol.
 //!
-//! The implementation was tested using a [TFA-Dostmann AIRCO2TROL MINI]
-//! [AIRCO2TROL MINI] sensor.
+//! This crate decodes the packets, but does not perform the decryption
+//! commonly required for USB devices using this sensor. To read data from one
+//! of the compatible commercially-available USB sensors, use the
+//! [`co2mon`][co2mon] crate.
 //!
-//! To read data from one of the compatible commercially-available USB
-//! sensors, use the [`co2mon`][co2mon] crate.
+//! The implementation was tested using a [TFA-Dostmann AIRCO2TROL MINI][AIRCO2TROL MINI]
+//! sensor.
 //!
 //! [AIRCO2TROL MINI]: https://www.tfa-dostmann.de/en/produkt/co2-monitor-airco2ntrol-mini/
 //! [ZG]: http://www.zyaura.com/products/ZG_module.asp
+//!
+//! # Example
+//!
+//! ```no_run
+//! # use zg_co2::Result;
+//! # fn main() -> Result<()> {
+//! #
+//! let packet = [0x50, 0x04, 0x57, 0xab, 0x0d];
+//! let measurement = zg_co2::decode(packet)?;
+//! println!("{:?}", measurement);
+//! #
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! # Features
+//!
+//! The `std` feature, enabled by default, makes [`Error`][Error] implement the
+//! [`Error`][std::error::Error] trait.
+//!
+//! The `serde` feature enables serialization and deserialization support for
+//! the [`Measurement`][Measurement] struct.
 //!
 //! # References
 //!
@@ -28,10 +52,25 @@ pub use error::Error;
 
 mod error;
 
-/// Result type for the `decode` function.
+/// A specialized [`Result`][std::result::Result] type for the [`decode`] function.
 pub type Result<T> = result::Result<T, Error>;
 
-/// A single sensor measurement.
+/// A single sensor measurement result.
+///
+/// # Example
+///
+/// ```
+/// # use zg_co2::{Measurement, Result};
+/// # fn main() -> Result<()> {
+/// #
+/// let decoded = zg_co2::decode([0x50, 0x04, 0x57, 0xab, 0x0d])?;
+/// if let Measurement::CO2(co2) = decoded {
+///     println!("CO₂: {} ppm", co2);
+/// }
+/// #
+/// # Ok(())
+/// # }
+/// ```
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum Measurement {
@@ -52,6 +91,8 @@ pub enum Measurement {
 }
 
 /// Decodes a message from the sensor.
+///
+/// # Example
 ///
 /// ```
 /// let decoded = zg_co2::decode([0x50, 0x04, 0x57, 0xab, 0x0d]);

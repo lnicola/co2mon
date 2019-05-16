@@ -1,6 +1,13 @@
 use core::fmt::{self, Display, Formatter};
 
-/// An error that occurred during decoding the message.
+/// A possible error value when decoding a sensor message.
+///
+/// # Example
+///
+/// ```
+/// let decoded = zg_co2::decode([0x50, 0x04, 0x57, 0xab, 0x00]);
+/// assert!(decoded.is_err());
+/// ```
 #[derive(Debug)]
 pub enum Error {
     /// The message was invalid (did not finish with `0x0d`).
