@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.0-rc.3] - 2019-05-16
+
+### Added
+
+- Fixed docs.rs build
+
 ## [1.0.0-rc.2] - 2019-05-16
 
 ### Added
