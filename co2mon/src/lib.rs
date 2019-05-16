@@ -55,7 +55,7 @@ use std::time::Duration;
 use zg_co2;
 
 pub use error::Error;
-pub use zg_co2::Measurement;
+pub use zg_co2::Reading;
 
 mod error;
 
@@ -140,7 +140,7 @@ impl Sensor {
         Ok(air_control)
     }
 
-    /// Takes a single measurement from the sensor.
+    /// Takes a single reading from the sensor.
     ///
     /// # Errors
     ///
@@ -158,15 +158,15 @@ impl Sensor {
     /// #
     /// # Ok(())
     /// # }
-    pub fn read_one(&self) -> Result<Measurement> {
+    pub fn read_one(&self) -> Result<Reading> {
         let mut data = [0; 8];
         if self.device.read_timeout(&mut data, self.timeout)? != 8 {
             return Err(Error::InvalidMessage);
         }
 
         let data = decrypt(data, self.key);
-        let measurement = zg_co2::decode([data[0], data[1], data[2], data[3], data[4]])?;
-        Ok(measurement)
+        let reading = zg_co2::decode([data[0], data[1], data[2], data[3], data[4]])?;
+        Ok(reading)
     }
 }
 

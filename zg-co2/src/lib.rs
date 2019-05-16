@@ -22,8 +22,8 @@
 //! # fn main() -> Result<()> {
 //! #
 //! let packet = [0x50, 0x04, 0x57, 0xab, 0x0d];
-//! let measurement = zg_co2::decode(packet)?;
-//! println!("{:?}", measurement);
+//! let reading = zg_co2::decode(packet)?;
+//! println!("{:?}", reading);
 //! #
 //! # Ok(())
 //! # }
@@ -35,7 +35,7 @@
 //! [`Error`][std::error::Error] trait.
 //!
 //! The `serde` feature enables serialization and deserialization support for
-//! the [`Measurement`][Measurement] struct.
+//! the [`Reading`][Reading] struct.
 //!
 //! # References
 //!
@@ -55,16 +55,16 @@ mod error;
 /// A specialized [`Result`][std::result::Result] type for the [`decode`] function.
 pub type Result<T> = result::Result<T, Error>;
 
-/// A single sensor measurement result.
+/// A single sensor reading.
 ///
 /// # Example
 ///
 /// ```
-/// # use zg_co2::{Measurement, Result};
+/// # use zg_co2::{Reading, Result};
 /// # fn main() -> Result<()> {
 /// #
 /// let decoded = zg_co2::decode([0x50, 0x04, 0x57, 0xab, 0x0d])?;
-/// if let Measurement::CO2(co2) = decoded {
+/// if let Reading::CO2(co2) = decoded {
 ///     println!("CO₂: {} ppm", co2);
 /// }
 /// #
@@ -73,7 +73,7 @@ pub type Result<T> = result::Result<T, Error>;
 /// ```
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-pub enum Measurement {
+pub enum Reading {
     /// Relative humidity
     Humidity(f32),
     /// Temperature in °C
@@ -101,7 +101,7 @@ pub enum Measurement {
 /// # Errors
 ///
 /// An error will be returned if the message could not be decoded.
-pub fn decode(data: [u8; 5]) -> Result<Measurement> {
+pub fn decode(data: [u8; 5]) -> Result<Reading> {
     if data[4] != 0x0d {
         return Err(Error::InvalidMessage);
     }
@@ -111,34 +111,34 @@ pub fn decode(data: [u8; 5]) -> Result<Measurement> {
     }
 
     let value = u16::from(data[1]) << 8 | u16::from(data[2]);
-    let measurement = match data[0] {
-        b'A' => Measurement::Humidity(f32::from(value) * 0.01),
-        b'B' => Measurement::Temperature(f32::from(value) * 0.0625 - 273.15),
-        b'P' => Measurement::CO2(value),
-        _ => Measurement::Unknown(data[0], value),
+    let reading = match data[0] {
+        b'A' => Reading::Humidity(f32::from(value) * 0.01),
+        b'B' => Reading::Temperature(f32::from(value) * 0.0625 - 273.15),
+        b'P' => Reading::CO2(value),
+        _ => Reading::Unknown(data[0], value),
     };
-    Ok(measurement)
+    Ok(reading)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{Error, Measurement};
+    use super::{Error, Reading};
     use assert_float_eq::{afe_is_f32_near, afe_near_error_msg, assert_f32_near};
 
     #[test]
     fn test_decode() {
         match super::decode([0x50, 0x04, 0x57, 0xab, 0x0d]) {
-            Ok(Measurement::CO2(val)) => assert_eq!(val, 1111),
+            Ok(Reading::CO2(val)) => assert_eq!(val, 1111),
             _ => assert!(false),
         }
 
         match super::decode([0x41, 0x00, 0x00, 0x41, 0x0d]) {
-            Ok(Measurement::Humidity(val)) => assert_f32_near!(val, 0.0),
+            Ok(Reading::Humidity(val)) => assert_f32_near!(val, 0.0),
             _ => assert!(false),
         }
 
         match super::decode([0x42, 0x12, 0x69, 0xbd, 0x0d]) {
-            Ok(Measurement::Temperature(val)) => assert_f32_near!(val, 21.4125),
+            Ok(Reading::Temperature(val)) => assert_f32_near!(val, 21.4125),
             _ => assert!(false),
         }
 
