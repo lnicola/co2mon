@@ -4,6 +4,7 @@ version = "0.1.0-alpha.4"
 authors = ["Laurențiu Nicola <lnicola@dend.ro>"]
 edition = "2018"
 description = "Driver for the Holtek ZyTemp CO₂ USB HID sensors"
+readme = "README.md"
 keywords = ["airco2ntrol", "co2", "holtek", "zytemp"]
 categories = ["hardware-support", "no-std"]
 license = "MIT OR Apache-2.0"

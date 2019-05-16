@@ -4,6 +4,7 @@ version = "0.1.0-alpha.2"
 authors = ["Laurențiu Nicola <lnicola@dend.ro>"]
 edition = "2018"
 description = "ZyAura CO₂ sensor protocol implementation"
+readme = "README.md"
 keywords = ["co2", "zyaura", "zg"]
 categories = ["embedded", "no-std"]
 license = "MIT OR Apache-2.0"
