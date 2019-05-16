@@ -1,17 +1,32 @@
 # Changelog
 
+## [1.0.0-rc.1] - 2019-05-16
+
+### Added
+
+- Added optional `serde` support
+- Added `Sensor::read` to read both values at once
+- Improved documentation
+
+### Changed
+
+- `OpenOptions` is no longer consumed when used
+- Implemented common traits for `SingleReading` and `OpenOptions`
+- Renamed `OpenOptions::with_serial` to `with_serial_number`
+- Renamed `Sensor::read` to `read_one`
+
 ## [0.1.0-alpha.4] - 2019-02-02
 
 ### Fixed
 
-- Add report id to fix the Windows support
+- Added report id to fix the Windows support
 
 ## [0.1.0-alpha.3] - 2019-02-02
 
 ### Added
 
-- Add read timeout support
-- Add features to control `hidapi` linking
+- Added read timeout support
+- Added features to control `hidapi` linking
 
 ### Changed
 
@@ -25,7 +40,7 @@
 
 ### Changed
 
-- Bump `zo-co2` dependency
+- Bumped `zo-co2` dependency
 
 ## [0.1.0-alpha.1] - 2019-02-01
 

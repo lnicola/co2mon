@@ -1,10 +1,22 @@
 # Changelog
 
+## [1.0.0-rc.1] - 2019-05-16
+
+### Added
+
+- Added optional `serde` support
+- Improved documentation
+
+### Changed
+
+- Renamed `Measurement` to `SingleReading`
+- Implemented common traits for `SingleReading`
+
 ## [0.1.0-alpha.2] - 2019-02-01
 
 ### Changed
 
-- Renam `use_std` feature to `std`
+- Renamed `use_std` feature to `std`
 
 ## [0.1.0-alpha.1] - 2019-02-01
 
