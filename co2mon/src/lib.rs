@@ -59,7 +59,7 @@ pub use zg_co2::Measurement;
 
 mod error;
 
-/// Result type for the fallible functions.
+/// A specialized [`Result`][std::result::Result] type for the fallible functions.
 pub type Result<T> = result::Result<T, Error>;
 
 /// Sensor driver struct.
@@ -87,6 +87,19 @@ impl Sensor {
     /// Opens the sensor device using the default USB Vendor ID (`0x04d9`) and Product ID (`0xa052`) values.
     ///
     /// When multiple devices are connected, the first one will be used.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::{Result, Sensor};
+    /// # fn main() -> Result<()> {
+    /// #
+    /// let sensor = Sensor::open_default()?;
+    /// let reading = sensor.read_one()?;
+    /// println!("{:?}", reading);
+    /// #
+    /// # Ok(())
+    /// # }
     pub fn open_default() -> Result<Self> {
         OpenOptions::new().open()
     }
@@ -132,6 +145,19 @@ impl Sensor {
     /// # Errors
     ///
     /// An error will be returned if a message could not be read or decoded.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::{Result, Sensor};
+    /// # fn main() -> Result<()> {
+    /// #
+    /// let sensor = Sensor::open_default()?;
+    /// let reading = sensor.read_one()?;
+    /// println!("{:?}", reading);
+    /// #
+    /// # Ok(())
+    /// # }
     pub fn read_one(&self) -> Result<Measurement> {
         let mut data = [0; 8];
         if self.device.read_timeout(&mut data, self.timeout)? != 8 {
@@ -184,6 +210,20 @@ enum DevicePathType {
 /// and Product ID `0xa052`, a `0` encryption key and a 5 seconds timeout.
 ///
 /// Normally there's no need to change the encryption key.
+///
+/// # Example
+///
+/// ```no_run
+/// # use co2mon::{OpenOptions, Result};
+/// # use std::time::Duration;
+/// # fn main() -> Result<()> {
+/// #
+/// let sensor = OpenOptions::new()
+///     .timeout(Some(Duration::from_secs(10)))
+///     .open()?;
+/// #
+/// # Ok(())
+/// # }
 #[derive(Debug)]
 pub struct OpenOptions {
     path_type: DevicePathType,
@@ -198,7 +238,25 @@ impl Default for OpenOptions {
 }
 
 impl OpenOptions {
-    fn new() -> Self {
+    /// Creates a new set of options to be configured.
+    ///
+    /// The defaults are opening the first connected sensor and a timeout of
+    /// 5 seconds.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::{OpenOptions, Result};
+    /// # use std::time::Duration;
+    /// # fn main() -> Result<()> {
+    /// #
+    /// let sensor = OpenOptions::new()
+    ///     .timeout(Some(Duration::from_secs(10)))
+    ///     .open()?;
+    /// #
+    /// # Ok(())
+    /// # }
+    pub fn new() -> Self {
         Self {
             path_type: DevicePathType::Id,
             key: [0; 8],
@@ -206,32 +264,93 @@ impl OpenOptions {
         }
     }
 
-    /// Sets the serial number of the sensor device.
+    /// Sets the serial number of the sensor device to open.
     pub fn with_serial(&mut self, sn: String) -> &mut Self {
         self.path_type = DevicePathType::Serial(sn);
         self
     }
 
-    /// Sets the path to the sensor device.
+    /// Sets the path to the sensor device to open.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::OpenOptions;
+    /// # use std::error::Error;
+    /// # use std::ffi::CString;
+    /// # use std::result::Result;
+    /// # fn main() -> Result<(), Box<Error>> {
+    /// #
+    /// let sensor = OpenOptions::new()
+    ///     .with_path(CString::new("/dev/bus/usb/001/004")?)
+    ///     .open()?;
+    /// #
+    /// # Ok(())
+    /// # }
     pub fn with_path(&mut self, path: CString) -> &mut Self {
         self.path_type = DevicePathType::Path(path);
         self
     }
 
     /// Sets the encryption key.
+    ///
+    /// The key is used to encrypt the communication with the sensor, but
+    /// changing it is probably not very useful.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::{OpenOptions, Result};
+    /// # use std::ffi::CString;
+    /// # fn main() -> Result<()> {
+    /// #
+    /// let sensor = OpenOptions::new()
+    ///     .with_key([0x62, 0xea, 0x1d, 0x4f, 0x14, 0xfa, 0xe5, 0x6c])
+    ///     .open()?;
+    /// #
+    /// # Ok(())
+    /// # }
     pub fn with_key(&mut self, key: [u8; 8]) -> &mut Self {
         self.key = key;
         self
     }
 
     /// Sets the read timeout.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::{OpenOptions, Result};
+    /// # use std::time::Duration;
+    /// # fn main() -> Result<()> {
+    /// #
+    /// let sensor = OpenOptions::new()
+    ///     .timeout(Some(Duration::from_secs(10)))
+    ///     .open()?;
+    /// #
+    /// # Ok(())
+    /// # }
     pub fn timeout(&mut self, timeout: Option<Duration>) -> &mut Self {
         self.timeout = timeout;
         self
     }
 
     /// Opens the sensor.
-    fn open(&self) -> Result<Sensor> {
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::{OpenOptions, Result};
+    /// # use std::time::Duration;
+    /// # fn main() -> Result<()> {
+    /// #
+    /// let sensor = OpenOptions::new()
+    ///     .timeout(Some(Duration::from_secs(10)))
+    ///     .open()?;
+    /// #
+    /// # Ok(())
+    /// # }
+    pub fn open(&self) -> Result<Sensor> {
         Sensor::open(self)
     }
 }

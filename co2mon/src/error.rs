@@ -2,7 +2,7 @@ use hidapi::HidError;
 use std::error;
 use std::fmt::{self, Display, Formatter};
 
-/// An error that occurred when reading the sensor.
+/// A possible error value when opening the sensor or taking a reading.
 #[derive(Debug)]
 pub enum Error {
     /// A hardware access error.
