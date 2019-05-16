@@ -166,6 +166,8 @@ fn decrypt(mut data: [u8; 8], key: [u8; 8]) -> [u8; 8] {
 
     data
 }
+
+#[derive(Debug)]
 enum DevicePathType {
     Id,
     Serial(String),
@@ -178,6 +180,7 @@ enum DevicePathType {
 /// and Product ID `0xa052`, a `0` encryption key and a 5 seconds timeout.
 ///
 /// Normally there's no need to change the encryption key.
+#[derive(Debug)]
 pub struct OpenOptions {
     path_type: DevicePathType,
     key: [u8; 8],
