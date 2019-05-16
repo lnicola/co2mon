@@ -30,7 +30,7 @@ mod error;
 pub type Result<T> = result::Result<T, Error>;
 
 /// A single sensor measurement.
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub enum Measurement {
     /// Relative humidity
     Humidity(f32),
