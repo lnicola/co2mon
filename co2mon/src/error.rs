@@ -11,6 +11,8 @@ pub enum Error {
     InvalidMessage,
     /// A checksum error.
     Checksum,
+    /// The timeout was too large.
+    InvalidTimeout,
 }
 
 impl From<HidError> for Error {
@@ -34,6 +36,7 @@ impl Display for Error {
             Error::InvalidMessage => write!(f, "invalid message"),
             Error::Checksum => write!(f, "checksum error"),
             Error::Hid(err) => err.fmt(f),
+            Error::InvalidTimeout => write!(f, "invalid timeout"),
         }
     }
 }

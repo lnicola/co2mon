@@ -80,7 +80,7 @@ pub type Result<T> = result::Result<T, Error>;
 pub struct Sensor {
     device: HidDevice,
     key: [u8; 8],
-    timeout: Option<Duration>,
+    timeout: i32,
 }
 
 impl Sensor {
@@ -113,10 +113,16 @@ impl Sensor {
         };
         device.send_feature_report(&frame)?;
 
+        let timeout = options
+            .timeout
+            .map(|timeout| timeout.as_millis())
+            .map_or(Ok(-1), i32::try_from)
+            .map_err(|_| Error::InvalidTimeout)?;
+
         let air_control = Self {
             device,
             key,
-            timeout: options.timeout,
+            timeout,
         };
         Ok(air_control)
     }
@@ -124,14 +130,7 @@ impl Sensor {
     /// Takes a measurement from the sensor.
     pub fn read(&self) -> Result<Measurement> {
         let mut data = [0; 8];
-
-        let timeout = self
-            .timeout
-            .map(|timeout| timeout.as_millis())
-            .and_then(|ms| i32::try_from(ms).ok())
-            .unwrap_or(-1);
-
-        if self.device.read_timeout(&mut data, timeout)? != 8 {
+        if self.device.read_timeout(&mut data, self.timeout)? != 8 {
             return Err(Error::InvalidMessage);
         }
 
