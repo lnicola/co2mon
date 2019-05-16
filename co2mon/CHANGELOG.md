@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.0-rc.2] - 2019-05-16
+
+### Added
+
+- Improved documentation
+
 ## [1.0.0-rc.1] - 2019-05-16
 
 ### Added

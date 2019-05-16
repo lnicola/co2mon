@@ -1,4 +1,4 @@
-#![doc(html_root_url = "https://docs.rs/co2mon/1.0.0-rc.1")]
+#![doc(html_root_url = "https://docs.rs/co2mon/1.0.0-rc.2")]
 #![deny(missing_docs)]
 
 //! A driver for the Holtek ([ZyAura ZG][ZG]) CO₂ USB monitors.
@@ -71,6 +71,19 @@ mod error;
 pub type Result<T> = result::Result<T, Error>;
 
 /// A reading consisting of temperature (in °C) and CO₂ concentration (in ppm) values.
+///
+/// # Example
+///
+/// ```no_run
+/// # use co2mon::{Result, Sensor};
+/// # fn main() -> Result<()> {
+/// #
+/// let sensor = Sensor::open_default()?;
+/// let reading = sensor.read()?;
+/// println!("{} °C, {} ppm CO₂", reading.temperature(), reading.co2());
+/// #
+/// # Ok(())
+/// # }
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Reading {
@@ -80,11 +93,37 @@ pub struct Reading {
 
 impl Reading {
     /// Returns the measured temperature in °C.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::{Result, Sensor};
+    /// # fn main() -> Result<()> {
+    /// #
+    /// let sensor = Sensor::open_default()?;
+    /// let reading = sensor.read()?;
+    /// println!("{} °C", reading.temperature());
+    /// #
+    /// # Ok(())
+    /// # }
     pub fn temperature(&self) -> f32 {
         self.temperature
     }
 
     /// Returns the CO₂ concentration in ppm (parts per million).
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::{Result, Sensor};
+    /// # fn main() -> Result<()> {
+    /// #
+    /// let sensor = Sensor::open_default()?;
+    /// let reading = sensor.read()?;
+    /// println!("{} ppm CO₂", reading.co2());
+    /// #
+    /// # Ok(())
+    /// # }
     pub fn co2(&self) -> u16 {
         self.co2
     }
