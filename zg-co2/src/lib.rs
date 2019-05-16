@@ -29,7 +29,7 @@ mod error;
 /// Result type for the `decode` function.
 pub type Result<T> = result::Result<T, Error>;
 
-/// A sensor measurement.
+/// A single sensor measurement.
 #[derive(Debug)]
 pub enum Measurement {
     /// Relative humidity
