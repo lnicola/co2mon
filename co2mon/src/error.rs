@@ -13,6 +13,12 @@ pub enum Error {
     Checksum,
     /// The timeout was too large.
     InvalidTimeout,
+    /// Hint against exhaustive matching.
+    ///
+    /// This enum may be extended with additional variants, so users should not
+    /// count on exhaustive matching.
+    #[doc(hidden)]
+    __Nonexhaustive,
 }
 
 impl From<HidError> for Error {
@@ -26,6 +32,7 @@ impl From<zg_co2::Error> for Error {
         match err {
             zg_co2::Error::InvalidMessage => Error::InvalidMessage,
             zg_co2::Error::Checksum => Error::Checksum,
+            _ => unreachable!(),
         }
     }
 }
@@ -37,6 +44,7 @@ impl Display for Error {
             Error::Checksum => write!(f, "checksum error"),
             Error::Hid(err) => err.fmt(f),
             Error::InvalidTimeout => write!(f, "invalid timeout"),
+            _ => unreachable!(),
         }
     }
 }

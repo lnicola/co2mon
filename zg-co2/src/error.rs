@@ -7,6 +7,12 @@ pub enum Error {
     InvalidMessage,
     /// The message had a checksum error.
     Checksum,
+    /// Hint against exhaustive matching.
+    ///
+    /// This enum may be extended with additional variants, so users should not
+    /// count on exhaustive matching.
+    #[doc(hidden)]
+    __Nonexhaustive,
 }
 
 impl Display for Error {
@@ -14,6 +20,7 @@ impl Display for Error {
         match self {
             Error::InvalidMessage => write!(f, "invalid message"),
             Error::Checksum => write!(f, "checksum error"),
+            _ => unreachable!(),
         }
     }
 }
