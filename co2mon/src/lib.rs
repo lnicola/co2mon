@@ -112,7 +112,7 @@ impl Sensor {
 
         let device = match options.path_type {
             DevicePathType::Id => hidapi.open(VID, PID),
-            DevicePathType::Serial(ref sn) => hidapi.open_serial(VID, PID, &sn),
+            DevicePathType::SerialNumber(ref sn) => hidapi.open_serial(VID, PID, &sn),
             DevicePathType::Path(ref path) => hidapi.open_path(&path),
         }?;
 
@@ -200,7 +200,7 @@ fn decrypt(mut data: [u8; 8], key: [u8; 8]) -> [u8; 8] {
 #[derive(Debug)]
 enum DevicePathType {
     Id,
-    Serial(String),
+    SerialNumber(String),
     Path(CString),
 }
 
@@ -265,8 +265,26 @@ impl OpenOptions {
     }
 
     /// Sets the serial number of the sensor device to open.
-    pub fn with_serial(&mut self, sn: String) -> &mut Self {
-        self.path_type = DevicePathType::Serial(sn);
+    ///
+    /// The serial number appears to be the firmware version.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use co2mon::OpenOptions;
+    /// # use std::error::Error;
+    /// # use std::ffi::CString;
+    /// # use std::result::Result;
+    /// # fn main() -> Result<(), Box<Error>> {
+    /// #
+    /// let sensor = OpenOptions::new()
+    ///     .with_serial_number("1.40")
+    ///     .open()?;
+    /// #
+    /// # Ok(())
+    /// # }
+    pub fn with_serial_number<S: Into<String>>(&mut self, sn: S) -> &mut Self {
+        self.path_type = DevicePathType::SerialNumber(sn.into());
         self
     }
 
