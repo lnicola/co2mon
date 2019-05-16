@@ -1,4 +1,4 @@
-use co2mon::{Reading, Result, Sensor};
+use co2mon::{Result, Sensor, SingleReading};
 use std::thread;
 use std::time::Duration;
 
@@ -7,8 +7,8 @@ fn read_both(sensor: &Sensor) -> Result<(f32, u16)> {
     let mut co2 = None;
     loop {
         match sensor.read_one()? {
-            Reading::Temperature(val) => temperature = Some(val),
-            Reading::CO2(val) => co2 = Some(val),
+            SingleReading::Temperature(val) => temperature = Some(val),
+            SingleReading::CO2(val) => co2 = Some(val),
             _ => {}
         }
         if let (Some(temperature), Some(co2)) = (temperature, co2) {

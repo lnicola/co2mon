@@ -35,7 +35,7 @@
 //! [`Error`][std::error::Error] trait.
 //!
 //! The `serde` feature enables serialization and deserialization support for
-//! the [`Reading`][Reading] struct.
+//! the [`SingleReading`][SingleReading] struct.
 //!
 //! # References
 //!
@@ -60,11 +60,11 @@ pub type Result<T> = result::Result<T, Error>;
 /// # Example
 ///
 /// ```
-/// # use zg_co2::{Reading, Result};
+/// # use zg_co2::{SingleReading, Result};
 /// # fn main() -> Result<()> {
 /// #
 /// let decoded = zg_co2::decode([0x50, 0x04, 0x57, 0xab, 0x0d])?;
-/// if let Reading::CO2(co2) = decoded {
+/// if let SingleReading::CO2(co2) = decoded {
 ///     println!("CO₂: {} ppm", co2);
 /// }
 /// #
@@ -73,7 +73,7 @@ pub type Result<T> = result::Result<T, Error>;
 /// ```
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-pub enum Reading {
+pub enum SingleReading {
     /// Relative humidity
     Humidity(f32),
     /// Temperature in °C
@@ -101,7 +101,7 @@ pub enum Reading {
 /// # Errors
 ///
 /// An error will be returned if the message could not be decoded.
-pub fn decode(data: [u8; 5]) -> Result<Reading> {
+pub fn decode(data: [u8; 5]) -> Result<SingleReading> {
     if data[4] != 0x0d {
         return Err(Error::InvalidMessage);
     }
@@ -112,33 +112,33 @@ pub fn decode(data: [u8; 5]) -> Result<Reading> {
 
     let value = u16::from(data[1]) << 8 | u16::from(data[2]);
     let reading = match data[0] {
-        b'A' => Reading::Humidity(f32::from(value) * 0.01),
-        b'B' => Reading::Temperature(f32::from(value) * 0.0625 - 273.15),
-        b'P' => Reading::CO2(value),
-        _ => Reading::Unknown(data[0], value),
+        b'A' => SingleReading::Humidity(f32::from(value) * 0.01),
+        b'B' => SingleReading::Temperature(f32::from(value) * 0.0625 - 273.15),
+        b'P' => SingleReading::CO2(value),
+        _ => SingleReading::Unknown(data[0], value),
     };
     Ok(reading)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{Error, Reading};
+    use super::{Error, SingleReading};
     use assert_float_eq::{afe_is_f32_near, afe_near_error_msg, assert_f32_near};
 
     #[test]
     fn test_decode() {
         match super::decode([0x50, 0x04, 0x57, 0xab, 0x0d]) {
-            Ok(Reading::CO2(val)) => assert_eq!(val, 1111),
+            Ok(SingleReading::CO2(val)) => assert_eq!(val, 1111),
             _ => assert!(false),
         }
 
         match super::decode([0x41, 0x00, 0x00, 0x41, 0x0d]) {
-            Ok(Reading::Humidity(val)) => assert_f32_near!(val, 0.0),
+            Ok(SingleReading::Humidity(val)) => assert_f32_near!(val, 0.0),
             _ => assert!(false),
         }
 
         match super::decode([0x42, 0x12, 0x69, 0xbd, 0x0d]) {
-            Ok(Reading::Temperature(val)) => assert_f32_near!(val, 21.4125),
+            Ok(SingleReading::Temperature(val)) => assert_f32_near!(val, 21.4125),
             _ => assert!(false),
         }
 

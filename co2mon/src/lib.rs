@@ -55,7 +55,7 @@ use std::time::Duration;
 use zg_co2;
 
 pub use error::Error;
-pub use zg_co2::Reading;
+pub use zg_co2::SingleReading;
 
 mod error;
 
@@ -158,7 +158,7 @@ impl Sensor {
     /// #
     /// # Ok(())
     /// # }
-    pub fn read_one(&self) -> Result<Reading> {
+    pub fn read_one(&self) -> Result<SingleReading> {
         let mut data = [0; 8];
         if self.device.read_timeout(&mut data, self.timeout)? != 8 {
             return Err(Error::InvalidMessage);
