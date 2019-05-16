@@ -20,3 +20,18 @@ impl Display for Error {
 
 #[cfg(feature = "std")]
 impl std::error::Error for Error {}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_send() {
+        fn assert_send<T: Send>() {}
+        assert_send::<super::Error>();
+    }
+
+    #[test]
+    fn test_sync() {
+        fn assert_sync<T: Sync>() {}
+        assert_sync::<super::Error>();
+    }
+}
