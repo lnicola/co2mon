@@ -1,3 +1,4 @@
+#![doc(html_root_url = "https://docs.rs/zg-co2/0.1.0-alpha.2")]
 #![deny(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
