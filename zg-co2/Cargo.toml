@@ -11,8 +11,8 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/lnicola/co2mon"
 
 [features]
-# The std feature enables std support. Currently it's used only to
-# implement std::error::Error on zg_co2::Error.
+# Add std support. Currently used to implement std::error::Error
+# for zg_co2::Error.
 std = []
 default = ["std"]
 
