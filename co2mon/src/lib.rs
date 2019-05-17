@@ -258,19 +258,11 @@ impl Sensor {
     /// # Ok(())
     /// # }
     pub fn read(&self) -> Result<Reading> {
+        let start = Instant::now();
         let mut temperature = None;
         let mut co2 = None;
-        let mut duration = Duration::default();
         loop {
-            let reading = if self.timeout != -1 {
-                let start = Instant::now();
-                let reading = self.read_one()?;
-                duration += Instant::now() - start;
-                reading
-            } else {
-                self.read_one()?
-            };
-
+            let reading = self.read_one()?;
             match reading {
                 SingleReading::Temperature(val) => temperature = Some(val),
                 SingleReading::CO2(val) => co2 = Some(val),
@@ -281,8 +273,11 @@ impl Sensor {
                 return Ok(reading);
             }
 
-            if self.timeout != -1 && duration.as_millis() > self.timeout as u128 {
-                return Err(Error::Timeout);
+            if self.timeout != -1 {
+                let duration = Instant::now() - start;
+                if duration.as_millis() > self.timeout as u128 {
+                    return Err(Error::Timeout);
+                }
             }
         }
     }
