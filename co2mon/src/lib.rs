@@ -1,4 +1,4 @@
-#![doc(html_root_url = "https://docs.rs/co2mon/1.0.0-rc.3")]
+#![doc(html_root_url = "https://docs.rs/co2mon/1.0.0")]
 #![deny(missing_docs)]
 
 //! A driver for the Holtek ([ZyAura ZG][ZG]) CO₂ USB monitors.
