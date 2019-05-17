@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.0] - 2019-05-17
+
+### Changed
+
+- Simplified timeout logic
+
 ## [1.0.0-rc.3] - 2019-05-16
 
 ### Added
