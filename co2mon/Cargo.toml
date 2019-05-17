@@ -1,6 +1,6 @@
 [package]
 name = "co2mon"
-version = "1.0.0-rc.3"
+version = "1.0.0"
 authors = ["Laurențiu Nicola <lnicola@dend.ro>"]
 edition = "2018"
 description = "Driver for the Holtek ZyTemp CO₂ USB HID sensors"
