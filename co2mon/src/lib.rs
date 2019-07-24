@@ -41,11 +41,6 @@
 //!
 //! Note that the `udev` rule above makes the device accessible to every local user.
 //!
-//! # Features
-//!
-//! The `serde` feature enables serialization and deserialization support for
-//! the [`Reading`][Reading] and [`SingleReading`][SingleReading] structs.
-//!
 //! # References
 //!
 //! The USB HID protocol is not documented, but was [reverse-engineered][had] [before][revspace].
@@ -64,8 +59,6 @@ pub use error::Error;
 pub use zg_co2::SingleReading;
 
 mod error;
-#[cfg(feature = "serde")]
-mod serde_types;
 
 /// A specialized [`Result`][std::result::Result] type for the fallible functions.
 pub type Result<T> = result::Result<T, Error>;

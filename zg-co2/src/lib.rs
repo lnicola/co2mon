@@ -34,9 +34,6 @@
 //! The `std` feature, enabled by default, makes [`Error`][Error] implement the
 //! [`Error`][std::error::Error] trait.
 //!
-//! The `serde` feature enables serialization and deserialization support for
-//! the [`SingleReading`][SingleReading] struct.
-//!
 //! # References
 //!
 //! See [this link][revspace] for more information about the protocol.
@@ -49,8 +46,6 @@ use core::result;
 pub use error::Error;
 
 mod error;
-#[cfg(feature = "serde")]
-mod serde_types;
 
 /// A specialized [`Result`][std::result::Result] type for the [`decode`] function.
 pub type Result<T> = result::Result<T, Error>;
