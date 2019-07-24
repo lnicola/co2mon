@@ -18,5 +18,6 @@ linux-shared-libusb = ["hidapi/linux-shared-libusb"]
 linux-shared-hidraw = ["hidapi/linux-shared-hidraw"]
 
 [dependencies]
+failure = "0.1"
 hidapi = "0.5"
 zg-co2 = { version = "1.0", path = "../zg-co2" }

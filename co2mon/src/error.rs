@@ -1,12 +1,12 @@
+use failure::Fail;
 use hidapi::HidError;
 use std::error;
 use std::fmt::{self, Display, Formatter};
-
 /// A possible error value when opening the sensor or taking a reading.
 #[derive(Debug)]
 pub enum Error {
     /// A hardware access error.
-    Hid(HidError),
+    Hid(Box<dyn error::Error + Send + Sync>),
     /// The sensor returned an invalid message or a single read timeout
     /// expired.
     InvalidMessage,
@@ -31,7 +31,7 @@ pub enum Error {
 
 impl From<HidError> for Error {
     fn from(err: HidError) -> Self {
-        Error::Hid(err)
+        Error::Hid(Box::new(err.compat()))
     }
 }
 
@@ -57,7 +57,14 @@ impl Display for Error {
     }
 }
 
-impl error::Error for Error {}
+impl error::Error for Error {
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+        match self {
+            Error::Hid(cause) => Some(cause.as_ref()),
+            _ => None,
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
