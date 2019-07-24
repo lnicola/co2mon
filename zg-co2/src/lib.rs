@@ -117,7 +117,6 @@ pub fn decode(data: [u8; 5]) -> Result<SingleReading> {
 #[cfg(test)]
 mod tests {
     use super::{Error, SingleReading};
-    use assert_float_eq::{afe_is_f32_near, afe_near_error_msg, assert_f32_near};
 
     #[test]
     fn test_decode() {
@@ -127,12 +126,12 @@ mod tests {
         }
 
         match super::decode([0x41, 0x00, 0x00, 0x41, 0x0d]) {
-            Ok(SingleReading::Humidity(val)) => assert_f32_near!(val, 0.0),
+            Ok(SingleReading::Humidity(val)) => assert!(val == 0.0),
             _ => assert!(false),
         }
 
         match super::decode([0x42, 0x12, 0x69, 0xbd, 0x0d]) {
-            Ok(SingleReading::Temperature(val)) => assert_f32_near!(val, 21.4125),
+            Ok(SingleReading::Temperature(val)) => assert!(val == 4713.0 * 0.0625 - 273.15),
             _ => assert!(false),
         }
 
