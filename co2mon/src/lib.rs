@@ -54,8 +54,6 @@
 //! [revspace]: https://revspace.nl/CO2MeterHacking
 
 use hidapi::{HidApi, HidDevice};
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
 use std::ffi::CString;
 use std::result;
@@ -66,6 +64,8 @@ pub use error::Error;
 pub use zg_co2::SingleReading;
 
 mod error;
+#[cfg(feature = "serde")]
+mod serde_types;
 
 /// A specialized [`Result`][std::result::Result] type for the fallible functions.
 pub type Result<T> = result::Result<T, Error>;
@@ -85,7 +85,6 @@ pub type Result<T> = result::Result<T, Error>;
 /// # Ok(())
 /// # }
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Reading {
     temperature: f32,
     co2: u16,

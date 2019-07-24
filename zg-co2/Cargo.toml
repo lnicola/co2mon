@@ -21,6 +21,7 @@ serde = { version = "1.0", optional = true, default-features = false, features =
 
 [dev-dependencies]
 assert_float_eq = { version = "1.1", default-features = false }
+serde_test = "1.0"
 
 [package.metadata.docs.rs]
 all-features = true
