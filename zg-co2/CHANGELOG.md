@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.0] - 2019-08-01
+
+### Removed
+
+- Removed `serde` feature
+
 ## [1.0.0] - 2019-05-17
 
 No changes

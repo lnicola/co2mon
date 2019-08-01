@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0] - 2019-08-01
+
+### Added
+
+- Implemented `source` for `Error`
+- `Sensor` can now be sent across threads
+
+### Changed
+
+- Updated `hidapi` dependency
+- Build times are a lot better `failure` is no longer used
+
+### Removed
+
+- Removed `serde` feature
+
 ## [1.0.0] - 2019-05-17
 
 ### Changed
