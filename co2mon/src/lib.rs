@@ -492,6 +492,7 @@ mod tests {
     #[test]
     fn test_open_options_send() {
         fn assert_send<T: Send>() {}
+        assert_send::<super::Sensor>();
         assert_send::<super::OpenOptions>();
     }
 
