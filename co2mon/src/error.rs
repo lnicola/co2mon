@@ -1,7 +1,7 @@
-use failure::Fail;
 use hidapi::HidError;
 use std::error;
 use std::fmt::{self, Display, Formatter};
+
 /// A possible error value when opening the sensor or taking a reading.
 #[derive(Debug)]
 pub enum Error {
@@ -31,7 +31,7 @@ pub enum Error {
 
 impl From<HidError> for Error {
     fn from(err: HidError) -> Self {
-        Error::Hid(Box::new(err.compat()))
+        Error::Hid(Box::new(err))
     }
 }
 
