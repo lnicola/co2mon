@@ -1,6 +1,6 @@
 [package]
 name = "co2mon"
-version = "2.0.0"
+version = "2.0.1"
 authors = ["Laurențiu Nicola <lnicola@dend.ro>"]
 edition = "2018"
 description = "Driver for the Holtek ZyTemp CO₂ USB HID sensors"
@@ -19,4 +19,4 @@ linux-shared-hidraw = ["hidapi/linux-shared-hidraw"]
 
 [dependencies]
 hidapi = "1.0"
-zg-co2 = { version = "^2.0", path = "../zg-co2" }
+zg-co2 = { version = "2.0", path = "../zg-co2" }

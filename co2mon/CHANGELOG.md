@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.1] - 2019-09-23
+
+### Fixed
+
+- Fixed `html_root_url` value
+
 ## [2.0.0] - 2019-08-01
 
 ### Added
