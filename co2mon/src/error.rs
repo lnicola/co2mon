@@ -6,7 +6,7 @@ use std::fmt::{self, Display, Formatter};
 #[derive(Debug)]
 pub enum Error {
     /// A hardware access error.
-    Hid(Box<dyn error::Error + Send + Sync>),
+    Hid(Box<HidError>),
     /// The sensor returned an invalid message or a single read timeout
     /// expired.
     InvalidMessage,
