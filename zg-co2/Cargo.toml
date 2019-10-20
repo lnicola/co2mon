@@ -1,6 +1,6 @@
 [package]
 name = "zg-co2"
-version = "2.0.0"
+version = "2.0.1"
 authors = ["Laurențiu Nicola <lnicola@dend.ro>"]
 edition = "2018"
 description = "ZyAura CO₂ sensor protocol implementation"
