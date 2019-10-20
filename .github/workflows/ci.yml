@@ -32,15 +32,6 @@ jobs:
       with:
         command: fetch
 
-    - name: Install libusb
-      if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get install libusb-1.0-0-dev
-
-    - name: Check
-      uses: actions-rs/cargo@v1
-      with:
-        command: check
-
     - name: Format
       if: matrix.os == 'ubuntu-latest'
       uses: actions-rs/cargo@v1
@@ -48,26 +39,43 @@ jobs:
         command: fmt
         arguments: --all -- --check
 
+    - name: Install libusb
+      if: matrix.os == 'ubuntu-latest'
+      run: sudo apt-get install libusb-1.0-0-dev
+
+    - name: Check
+      env:
+        CARGO_INCREMENTAL: 0
+      uses: actions-rs/cargo@v1
+      with:
+        command: check
+
     - name: Clippy
+      env:
+        CARGO_INCREMENTAL: 0
       uses: actions-rs/cargo@v1
       with:
         command: clippy
         arguments: -- -D warnings
 
-    - name: Test (zg-co2)
+    - name: Build
+      env:
+        CARGO_INCREMENTAL: 0
+      uses: actions-rs/cargo@v1
+      with:
+        command: build
+
+    - name: Test
+      env:
+        CARGO_INCREMENTAL: 0
       uses: actions-rs/cargo@v1
       with:
         command: test
-        arguments: --manifest-path zg-co2/Cargo.toml
 
     - name: Test (zg-co2 no-default-features)
+      env:
+        CARGO_INCREMENTAL: 0
       uses: actions-rs/cargo@v1
       with:
         command: test
         arguments: --manifest-path zg-co2/Cargo.toml --no-default-features
-
-    - name: Test (co2mon)
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
-        arguments: --manifest-path co2mon/Cargo.toml
