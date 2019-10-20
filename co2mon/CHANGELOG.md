@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.1] - 2019-09-23
+## [2.0.1] - 2019-10-20
 
 ### Fixed
 
@@ -12,11 +12,12 @@
 
 - Implemented `source` for `Error`
 - `Sensor` can now be sent across threads
+- Reduced size of `Error`
 
 ### Changed
 
 - Updated `hidapi` dependency
-- Build times are a lot better `failure` is no longer used
+- Build times are a lot better (`failure` is no longer used)
 
 ### Removed
 
