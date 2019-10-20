@@ -2,8 +2,8 @@
 
 [![Actions Status]][github actions] [![Latest Version]][crates.io] [![API docs]][docs.rs]
 
-[Build Status]: https://api.travis-ci.com/lnicola/co2mon.svg?branch=master
-[Actions Status]: https://github.com/lnicola/sd-notify/workflows/ci/badge.svg
+[Actions Status]: https://github.com/lnicola/co2mon/workflows/ci/badge.svg
+[github actions]: https://github.com/lnicola/co2mon/actions
 [Latest Version]: https://img.shields.io/crates/v/co2mon.svg
 [crates.io]: https://crates.io/crates/co2mon
 [API docs]: https://docs.rs/co2mon/badge.svg
