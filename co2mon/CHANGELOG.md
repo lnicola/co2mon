@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.2] - 2019-11-27
+
+### Fixed
+
+- Fixed panic when displaying timeout errors
+
 ## [2.0.1] - 2019-10-20
 
 ### Fixed

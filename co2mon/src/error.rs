@@ -51,6 +51,7 @@ impl Display for Error {
             Error::InvalidMessage => write!(f, "invalid message"),
             Error::Checksum => write!(f, "checksum error"),
             Error::Hid(err) => err.fmt(f),
+            Error::Timeout => write!(f, "timeout"),
             Error::InvalidTimeout => write!(f, "invalid timeout"),
             _ => unreachable!(),
         }
