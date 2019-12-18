@@ -12,11 +12,12 @@ repository = "https://github.com/lnicola/co2mon"
 exclude = ["udev/*"]
 
 [features]
+default = ["linux-static-libusb"]
 linux-static-libusb = ["hidapi/linux-static-libusb"]
 linux-static-hidraw = ["hidapi/linux-static-hidraw"]
 linux-shared-libusb = ["hidapi/linux-shared-libusb"]
 linux-shared-hidraw = ["hidapi/linux-shared-hidraw"]
 
 [dependencies]
-hidapi = "1.0"
+hidapi = { version = "1.0", default-features = false }
 zg-co2 = { version = "2.0", path = "../zg-co2" }
