@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.3] - 2019-12-19
+
+### Fixed
+
+- Fixed the `hidapi` linking `Cargo.toml` features (@tommilligan, [#3](https://github.com/lnicola/co2mon/pull/3))
+
 ## [2.0.2] - 2019-11-27
 
 ### Fixed
