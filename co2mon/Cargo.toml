@@ -19,5 +19,5 @@ linux-shared-libusb = ["hidapi/linux-shared-libusb"]
 linux-shared-hidraw = ["hidapi/linux-shared-hidraw"]
 
 [dependencies]
-hidapi = { version = "1.0", default-features = false }
+hidapi = { version = "1.1", default-features = false }
 zg-co2 = { version = "2.0", path = "../zg-co2" }
