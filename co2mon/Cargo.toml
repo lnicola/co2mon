@@ -11,6 +11,9 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/lnicola/co2mon"
 exclude = ["udev/*"]
 
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
 [features]
 default = ["linux-static-libusb"]
 linux-static-libusb = ["hidapi/linux-static-libusb"]

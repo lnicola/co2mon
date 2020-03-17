@@ -12,6 +12,7 @@ repository = "https://github.com/lnicola/co2mon"
 
 [package.metadata.docs.rs]
 all-features = true
+targets = ["x86_64-unknown-linux-gnu"]
 
 [features]
 default = ["std"]
