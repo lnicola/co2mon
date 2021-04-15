@@ -4,9 +4,9 @@
 //! A driver for the Holtek ([ZyAura ZG][ZG]) CO₂ USB monitors.
 //!
 //! The implementation was tested using a
-//! [TFA-Dostmann AIRCO2TROL MINI][AIRCO2TROL MINI] sensor.
+//! [TFA-Dostmann AIRCO2NTROL MINI][AIRCO2NTROL MINI] sensor.
 //!
-//! [AIRCO2TROL MINI]: https://www.tfa-dostmann.de/en/produkt/co2-monitor-airco2ntrol-mini/
+//! [AIRCO2NTROL MINI]: https://www.tfa-dostmann.de/en/produkt/co2-monitor-airco2ntrol-mini/
 //! [ZG]: http://www.zyaura.com/products/ZG_module.asp
 //!
 //! # Example usage
@@ -224,7 +224,13 @@ impl Sensor {
             return Err(Error::InvalidMessage);
         }
 
-        let data = decrypt(data, self.key);
+        // if the "magic byte" is present no decryption is necessary. This is the case for AirCO2ntrol Coach
+        // and "newer" AirCO2ntrol minis in general
+        let data = if data[4] == 0x0d {
+            data
+        } else {
+            decrypt(data, self.key)
+        };
         let reading = zg_co2::decode([data[0], data[1], data[2], data[3], data[4]])?;
         Ok(reading)
     }
