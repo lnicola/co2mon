@@ -223,8 +223,8 @@ impl Sensor {
             return Err(Error::InvalidMessage);
         }
 
-        // if the "magic byte" is present no decryption is necessary. This is the case for AirCO2ntrol Coach
-        // and "newer" AirCO2ntrol minis in general
+        // if the "magic byte" is present no decryption is necessary. This is the case for AIRCO2NTROL COACH
+        // and newer AIRCO2NTROL MINIs in general
         let data = if data[4] == 0x0d {
             data
         } else {
