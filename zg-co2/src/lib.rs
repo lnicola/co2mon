@@ -9,10 +9,10 @@
 //! of the compatible commercially-available USB sensors, use the
 //! [`co2mon`][co2mon] crate.
 //!
-//! The implementation was tested using a [TFA-Dostmann AIRCO2TROL MINI][AIRCO2TROL MINI]
+//! The implementation was tested using a [TFA-Dostmann AIRCO2NTROL MINI][AIRCO2NTROL MINI]
 //! sensor.
 //!
-//! [AIRCO2TROL MINI]: https://www.tfa-dostmann.de/en/produkt/co2-monitor-airco2ntrol-mini/
+//! [AIRCO2NTROL MINI]: https://www.tfa-dostmann.de/en/produkt/co2-monitor-airco2ntrol-mini/
 //! [ZG]: http://www.zyaura.com/products/ZG_module.asp
 //!
 //! # Example

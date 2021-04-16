@@ -10,9 +10,9 @@
 [docs.rs]: https://docs.rs/co2mon/
 
 A driver for the Holtek CO₂ USB monitors, tested using a
-[TFA-Dostmann AIRCO2TROL MINI][AIRCO2TROL MINI] sensor.
+[TFA-Dostmann AIRCO2NTROL MINI][AIRCO2NTROL MINI] sensor.
 
-[AIRCO2TROL MINI]: https://www.tfa-dostmann.de/en/produkt/co2-monitor-airco2ntrol-mini/
+[AIRCO2NTROL MINI]: https://www.tfa-dostmann.de/en/produkt/co2-monitor-airco2ntrol-mini/
 
 ## Permissions
 
