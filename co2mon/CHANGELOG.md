@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0] - 2021-04-16
+
+### Changed
+
+ - added support for newer AIRCO2NTROL devices that don't encrypt the data (@elmarx, [#6](https://github.com/lnicola/co2mon/pull/6))
+ - marked `Error` as `#[non_exhaustive]`
+
 ## [2.0.3] - 2019-12-19
 
 ### Fixed
