@@ -53,7 +53,6 @@ use std::convert::TryFrom;
 use std::ffi::CString;
 use std::result;
 use std::time::{Duration, Instant};
-use zg_co2;
 
 pub use error::Error;
 pub use zg_co2::SingleReading;
