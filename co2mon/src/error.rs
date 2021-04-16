@@ -4,6 +4,7 @@ use std::fmt::{self, Display, Formatter};
 
 /// A possible error value when opening the sensor or taking a reading.
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum Error {
     /// A hardware access error.
     Hid(Box<HidError>),
@@ -21,12 +22,6 @@ pub enum Error {
     Timeout,
     /// The configured timeout was too large.
     InvalidTimeout,
-    /// Hint against exhaustive matching.
-    ///
-    /// This enum may be extended with additional variants, so users should not
-    /// count on exhaustive matching.
-    #[doc(hidden)]
-    __Nonexhaustive,
 }
 
 impl From<HidError> for Error {
@@ -53,7 +48,6 @@ impl Display for Error {
             Error::Hid(err) => err.fmt(f),
             Error::Timeout => write!(f, "timeout"),
             Error::InvalidTimeout => write!(f, "invalid timeout"),
-            _ => unreachable!(),
         }
     }
 }

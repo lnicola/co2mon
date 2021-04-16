@@ -67,6 +67,7 @@ pub type Result<T> = result::Result<T, Error>;
 /// # }
 /// ```
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
+#[non_exhaustive]
 pub enum SingleReading {
     /// Relative humidity
     Humidity(f32),
@@ -76,12 +77,6 @@ pub enum SingleReading {
     CO2(u16),
     /// An unknown reading
     Unknown(u8, u16),
-    /// Hint against exhaustive matching.
-    ///
-    /// This enum may be extended with additional variants, so users should not
-    /// count on exhaustive matching.
-    #[doc(hidden)]
-    __Nonexhaustive,
 }
 
 /// Decodes a message from the sensor.
