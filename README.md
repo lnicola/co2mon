@@ -44,10 +44,11 @@ Release notes are available in [CHANGELOG.md](co2mon/CHANGELOG.md).
 
 ## Protocol
 
-The USB HID protocol is not documented, but was [reverse-engineered][had] [before][revspace].
+The USB HID protocol is not documented, but is a superset of [this one][co2meters] and was [reverse-engineered][had] [before][revspace].
 
 The implementation was inspired by [this one][co2mon].
 
+[co2meters]: https://co2meters.com/Documentation/Other/AN_RAD_0301_USB_Communications_Revised8.pdf
 [co2mon]: https://github.com/dmage/co2mon/
 [had]: https://hackaday.io/project/5301/
 [revspace]: https://revspace.nl/CO2MeterHacking
