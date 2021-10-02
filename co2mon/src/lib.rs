@@ -170,8 +170,8 @@ impl Sensor {
 
         let device = match options.path_type {
             DevicePathType::Id => hidapi.open(VID, PID),
-            DevicePathType::SerialNumber(ref sn) => hidapi.open_serial(VID, PID, &sn),
-            DevicePathType::Path(ref path) => hidapi.open_path(&path),
+            DevicePathType::SerialNumber(ref sn) => hidapi.open_serial(VID, PID, sn),
+            DevicePathType::Path(ref path) => hidapi.open_path(path),
         }?;
 
         let key = options.key;
