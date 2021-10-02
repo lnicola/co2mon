@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1] - 2021-10-02
+
+### Changed
+
+ - fixed rendering of Linux commands in the docs (@senden9, [#7](https://github.com/lnicola/co2mon/pull/7))
+ - marked `Error` as `#[non_exhaustive]`
+
 ## [2.1.0] - 2021-04-16
 
 ### Changed
