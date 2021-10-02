@@ -35,8 +35,8 @@
 //! Then reload the rules and trigger them:
 //!
 //! ```text
-//! # udevadm control --reload
-//! # udevadm trigger
+//! udevadm control --reload
+//! udevadm trigger
 //! ```
 //!
 //! Note that the `udev` rule above makes the device accessible to every local user.
