@@ -6,6 +6,9 @@ on:
     branches:
       - master
 
+env:
+  CARGO_INCREMENTAL: 0
+
 jobs:
   build:
 
@@ -23,9 +26,9 @@ jobs:
       uses: actions-rs/toolchain@v1
       with:
           toolchain: stable
-
-    - name: Install components
-      run: rustup component add --toolchain stable rustfmt clippy
+          profile: minimal
+          override: true
+          components: rustfmt, clippy
 
     - name: Fetch
       uses: actions-rs/cargo@v1
@@ -44,37 +47,27 @@ jobs:
       run: sudo apt-get install libusb-1.0-0-dev
 
     - name: Check
-      env:
-        CARGO_INCREMENTAL: 0
       uses: actions-rs/cargo@v1
       with:
         command: check
 
     - name: Clippy
-      env:
-        CARGO_INCREMENTAL: 0
       uses: actions-rs/cargo@v1
       with:
         command: clippy
         args: -- -D warnings
 
     - name: Build
-      env:
-        CARGO_INCREMENTAL: 0
       uses: actions-rs/cargo@v1
       with:
         command: build
 
     - name: Test
-      env:
-        CARGO_INCREMENTAL: 0
       uses: actions-rs/cargo@v1
       with:
         command: test
 
     - name: Test (zg-co2 no-default-features)
-      env:
-        CARGO_INCREMENTAL: 0
       uses: actions-rs/cargo@v1
       with:
         command: test
