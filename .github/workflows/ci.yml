@@ -37,7 +37,7 @@ jobs:
       uses: actions-rs/cargo@v1
       with:
         command: fmt
-        arguments: --all -- --check
+        args: --all -- --check
 
     - name: Install libusb
       if: matrix.os == 'ubuntu-latest'
@@ -56,7 +56,7 @@ jobs:
       uses: actions-rs/cargo@v1
       with:
         command: clippy
-        arguments: -- -D warnings
+        args: -- -D warnings
 
     - name: Build
       env:
@@ -78,4 +78,4 @@ jobs:
       uses: actions-rs/cargo@v1
       with:
         command: test
-        arguments: --manifest-path zg-co2/Cargo.toml --no-default-features
+        args: --manifest-path zg-co2/Cargo.toml --no-default-features
