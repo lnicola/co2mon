@@ -11,7 +11,6 @@ env:
 
 jobs:
   build:
-
     name: Build - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -19,56 +18,44 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
 
-    - name: Install toolchain
-      uses: actions-rs/toolchain@v1
-      with:
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
           toolchain: stable
           profile: minimal
           override: true
           components: rustfmt, clippy
 
-    - name: Fetch
-      uses: actions-rs/cargo@v1
-      with:
-        command: fetch
+      - name: Install libusb
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install libusb-1.0-0-dev
 
-    - name: Format
-      if: matrix.os == 'ubuntu-latest'
-      uses: actions-rs/cargo@v1
-      with:
-        command: fmt
-        args: --all -- --check
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v1
 
-    - name: Install libusb
-      if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get install libusb-1.0-0-dev
+      - name: Fetch
+        run: cargo fetch
 
-    - name: Check
-      uses: actions-rs/cargo@v1
-      with:
-        command: check
+      - name: Format
+        run: cargo fmt -- --check
 
-    - name: Clippy
-      uses: actions-rs/cargo@v1
-      with:
-        command: clippy
-        args: -- -D warnings
+      - name: Build
+        run: cargo build
 
-    - name: Build
-      uses: actions-rs/cargo@v1
-      with:
-        command: build
+      - name: Clippy
+        run: cargo clippy -- -D warnings
 
-    - name: Test
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
+      - name: Build tests
+        run: cargo test --no-run
 
-    - name: Test (zg-co2 no-default-features)
-      uses: actions-rs/cargo@v1
-      with:
-        command: test
-        args: --manifest-path zg-co2/Cargo.toml --no-default-features
+      - name: Test
+        run: cargo test
+
+      - name: Build tests (zg-co2 no-default-features)
+        run: cargo test --manifest-path zg-co2/Cargo.toml --no-default-features --no-run
+
+      - name: Test (zg-co2 no-default-features)
+        run: cargo test --manifest-path zg-co2/Cargo.toml --no-default-features
