@@ -385,7 +385,7 @@ impl OpenOptions {
     /// # use std::error::Error;
     /// # use std::ffi::CString;
     /// # use std::result::Result;
-    /// # fn main() -> Result<(), Box<Error>> {
+    /// # fn main() -> Result<(), Box<dyn Error>> {
     /// #
     /// let sensor = OpenOptions::new()
     ///     .with_serial_number("1.40")
@@ -407,7 +407,7 @@ impl OpenOptions {
     /// # use std::error::Error;
     /// # use std::ffi::CString;
     /// # use std::result::Result;
-    /// # fn main() -> Result<(), Box<Error>> {
+    /// # fn main() -> Result<(), Box<dyn Error>> {
     /// #
     /// let sensor = OpenOptions::new()
     ///     .with_path(CString::new("/dev/bus/usb/001/004")?)
